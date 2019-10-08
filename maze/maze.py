@@ -1,9 +1,10 @@
 import numpy as np
 import collections
+import copy
 import random
 
-import maze.utils as utils
-import maze.base as base
+import utils as utils
+import base as base
 
 
 class Maze(base.MazeBase):
@@ -396,7 +397,8 @@ class Maze(base.MazeBase):
             while x and y:
                 stack.append((x, y))
                 if (x, y) == end:  # Stop if end has been found
-                    return utils.draw_path(self.solution, stack)
+                    self.solution_stack = stack
+                    return utils.draw_path(self.solution, copy.copy(self.solution_stack))
                 x, y = self._solve_walk(x, y, visited)
             x, y = self._solve_backtrack(stack, visited)
 
@@ -428,6 +430,7 @@ class Maze(base.MazeBase):
             self._enqueue(queue, visited)
             if queue[0][0] == end:  # Stop if end has been found
                 cell = utils.stack_push(queue[0], end)  # Push end into cell
-                return utils.draw_path(self.solution, utils.stack_deque(cell))
+                self.solution_stack = utils.stack_deque(cell)
+                return utils.draw_path(self.solution, copy.copy(self.solution_stack))
 
         raise utils.MazeError("No solution found.")

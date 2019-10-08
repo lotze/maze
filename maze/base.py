@@ -4,7 +4,7 @@ import enum
 import os
 from PIL import Image
 
-import maze.utils as util
+import utils as util
 
 
 class MazeBase(object):
